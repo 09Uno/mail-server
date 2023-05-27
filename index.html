@@ -6,16 +6,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Enviar Email</title>
     <link rel="stylesheet" href="style.css">
-
 </head>
 <body>
-    <form action="enviar.php" method="post">
-        <input type="text" name="assunto" placeholder="Assunto">
-        <textarea name="mensagem" placeholder="Mensagem"></textarea>
-        <input type="submit" value="Enviar">
-        <p>
-            <a href="cadastrar.html">Cadastrar email's no banco</a> 
-        </p>
-    </form>
+    <main class="container">
+        <img src="img/logo.png" class="logo">
+        <form action="enviar.php" method="post" enctype="multipart/form-data">
+            <input type="text" name="assunto" placeholder="Assunto">
+            <textarea name="mensagem" placeholder="Mensagem"></textarea>
+            
+            <p>Adicione um anexo: (opcional)</p>
+            <input class="file" type="file" name="anexo" id="anexo">
+            <br/>
+            <br/>
+
+            <input type="submit" value="Enviar">
+            
+            <p class="link">
+                <a href="cadastrar.html">Cadastrar email's no banco</a>
+            </p>
+        </form>
+    </main>
 </body>
 </html>

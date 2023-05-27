@@ -16,12 +16,23 @@
     // Obtendo o email enviado pelo formulário
     $email = $_POST['email'];
 
+    // Verificando se o email já está cadastrado no banco de dados
+    $sql_verificar = "SELECT * FROM emails WHERE email = '$email'";
+    $resultado = $conexao->query($sql_verificar);
+
+    if ($resultado->num_rows > 0) {
+        echo "email já cadastrado!";
+        header("Location: cadastrar.html");
+        exit();
+    }
+
     // Preparando a consulta SQL para inserir o email no banco de dados
-    $sql = "INSERT INTO emails (email) VALUES ('$email')";
+    $sql_inserir = "INSERT INTO emails (email) VALUES ('$email')";
 
     // Executando a consulta SQL
-    if ($conexao->query($sql) === TRUE && $email != "") {
+    if ($conexao->query($sql_inserir) === TRUE && $email != "") {
         echo "<script>alert('Email cadastrado com sucesso!');</script>";
+        sleep(3);
         header("Location: cadastrar.html");
         exit(); // É importante sair do script após o redirecionamento
     } else {

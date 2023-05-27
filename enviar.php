@@ -8,14 +8,16 @@ require 'vendor/autoload.php';
 $mail = new PHPMailer(true);
 
 try {
-    $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+    // Configurações do servidor SMTP
+    // $mail->SMTPDebug = SMTP::DEBUG_SERVER;
     $mail->isSMTP();
-    $mail->Host = 'smtp.office365.com';
+    $mail->Host = '192.168.1.11';
+    $mail->Port = 25;
+
+    // Autenticação SMTP
     $mail->SMTPAuth = true;
     $mail->Username = 'baosendbao@outlook.com';
-    $mail->Password = 'Br!941690';
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-    $mail->Port = 587;
+    $mail->Password = '123';
 
     $servidor = "localhost";
     $usuario = "root";
@@ -30,17 +32,28 @@ try {
     $assunto = $_POST['assunto'];
     $mensagem = $_POST['mensagem'];
 
+    $anexo = $_FILES['anexo']['tmp_name'];
+
     $count = 0;
+
 
     $mail->setFrom('baosendbao@outlook.com', 'bao');
 
     while ($row = $resultado->fetch_assoc()) {
         $emailDestinatario = $row['email'];
-        $nome = $row['nome'];
+
         $mail->isHTML(true);
-        $mail->addAddress($emailDestinatario, $nome);
+        $mail->ClearAddresses();
+        $mail->addAddress($emailDestinatario, $assunto);
         $mail->Subject = $assunto;
         $mail->Body = "<b>$mensagem</b>";
+
+        // Adiciona o anexo
+
+        if (!empty($anexo) && is_uploaded_file($anexo)) {
+            $mail->addAttachment($anexo, $anexoNome);
+        }
+        
         $mail->send();
         $count++;
 
@@ -51,6 +64,10 @@ try {
     }
 
     echo 'Message has been sent';
+    header("Location: sucesso.html");
+
 } catch (Exception $e) {
     echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    header("Location: falha.html");
+
 }
